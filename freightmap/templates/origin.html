@@ -1,0 +1,54 @@
+{% load staticfiles %}
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static "map/origin.css" %}"/> 
+    <title> Origin - {{title}}</title>
+  	</head>
+
+  <body>
+  <img src="{% static "img/lineage.jpg" %}" alt="logo" style="width:150px;height:40px;">
+
+  <div class="header"> Origin - {{title}} </div> 
+
+  <br> 
+
+
+ 	<table style="width:90%">
+  <tr>
+    <th>ID</th>
+    <th>Customer Name</th> 
+    <th>Customer Code</th> 
+    <th> Batch </th>
+    <th>Load Num</th>
+    <th>Purchase Order</th>
+    <th>Date</th>
+    <th>Shipping Status</th>
+    <th>Address</th>
+    <th>Consign Code</th>
+    <th>Consignee</th>
+  </tr>
+  {% for item in all %}
+  <tr>
+    <td>{{item.id}}</td>
+    <td> {{item.custname}} </td>
+    <td>{{item.fcustcode}} </td>
+    <td>{{item.fbatch}} </td>
+    <td>{{item.floadnum}} </td>
+    <td> {{item.fpurchord}} </td>
+	<td> {{item.fbdate}} </td>
+	<td> {{item.fshipstat}} </td>
+	<td> {{item.faddress1}} </td>
+	<td> {{item.fconscode}} </td>	    
+	<td> {{item.fconsignee}} </td>	
+		    
+
+  </tr>
+  {% endfor %}
+</table>
+
+  </body>
+</html> 
+

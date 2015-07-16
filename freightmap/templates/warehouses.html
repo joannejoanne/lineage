@@ -1,0 +1,50 @@
+{% load staticfiles %}
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static "map/warehouses.css" %}"/> 
+    <title> Warehouses </title>
+  	</head>
+
+  <body>
+   <img src="{% static "img/lineage.jpg" %}" alt="logo" style="width:220px;height:60px;">
+
+  <div class="header"> WAREHOUSES </div> 
+  <a href="/warehousemap">
+<div id="link"> map </div>
+</a>
+  <br>
+  <br>
+  <br>
+
+	<table style="width:63%">
+  <tr>
+    <th>ID</th>
+    <th>Name</th> 
+    <th> Address </th>
+    <th>State</th>
+    <th>Zip</th>
+    <th>Country</th>
+    <th>Phone</th>
+  </tr>
+  {%for item in data %}
+  <tr>
+    <td>{{item.whid}}</td>
+    <td>{{item.whname}}</td> 
+    <td>{{item.addr1}} </td>
+    <td>{{item.state}} </td>
+    <td>{{item.zip}} </td>
+    <td>{{item.country_code}} </td>
+    <td>{{item.phone}} </td>
+
+  </tr>
+  {% endfor %}
+</table>
+
+
+  </body>
+
+</html> 
+

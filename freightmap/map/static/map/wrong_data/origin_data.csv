@@ -1,0 +1,30 @@
+iata,name,city,state,country,latitude,longitude
+Z18106,Lineage-Allentown-PA,Allentown,PA,USA,40.5693,-75.5889
+Z28625,Lineage-Statesville-NC,Statesville,NC,USA,35.8406,-80.8799
+Z30253,Lineage-Mcdonough-GA,Mcdonough,GA,USA,33.455,-84.1721
+Z35954,Lineage-Attalla-AL,Attalla,AL,USA,34.0433,-86.089
+Z39218,Lineage-Jackson-MS,Jackson,MS,USA,32.2304,-90.1621
+Z40258,Lineage-Louisville-KY,Louisville,KY,USA,38.1417,-85.8637
+Z45502,Lineage-Springfield-OH,Springfield,OH,USA,39.9266,-83.8128
+Z50313,"Lineage-Des Moines-IA","Des Moines",IA,USA,41.6376,-93.6164
+Z51442,Lineage-Denison-IA,Denison,IA,USA,42.0193,-95.3538
+Z52240,"Lineage-Iowa City-IA","Iowa City",IA,USA,41.6499,-91.5202
+Z52641,"Lineage-Mount Pleasant-IA","Mount Pleasant",IA,USA,40.974,-91.572
+Z60134,Lineage-Geneva-IL,Geneva,IL,USA,41.8857,-88.3196
+Z60510,Lineage-Batavia-IL,Batavia,IL,USA,41.8452,-88.31
+Z66111,"Lineage-Kansas City-KS","Kansas City",KS,USA,39.0766,-94.7902
+Z67801,"Lineage-Dodge City-KS","Dodge City",KS,USA,37.7553,-100.026
+Z68107,Lineage-Omaha-NE,Omaha,NE,USA,41.2052,-95.9554
+Z68137,Lineage-Omaha-NE,Omaha,NE,USA,41.2046,-96.1211
+Z68521,Lineage-Lincoln-NE,Lincoln,NE,USA,40.8556,-96.713
+Z68803,"Lineage-Grand Island-NE","Grand Island",NE,USA,40.9169,-98.3875
+Z75182,Lineage-Sunnyvale-TX,Sunnyvale,TX,USA,32.8036,-96.5696
+Z76106,"Lineage-Fort Worth-TX","Fort Worth",TX,USA,32.7984,-97.354
+Z78503,Lineage-Mcallen-TX,Mcallen,TX,USA,26.172,-98.2504
+Z79035,Lineage-Friona-TX,Friona,TX,USA,34.6317,-102.727
+Z79924,"Lineage-El Paso-TX","El Paso",TX,USA,31.9017,-106.418
+Z80631,Lineage-Greeley-CO,Greeley,CO,USA,40.4218,-104.692
+Z84337,Lineage-Tremonton-UT,Tremonton,UT,USA,41.6887,-112.223
+Z91752,"Lineage-Mira Loma-CA","Mira Loma",CA,USA,34.0018,-117.528
+Z95336,Lineage-Manteca-CA,Manteca,CA,USA,37.8128,-121.214
+Z98531,Lineage-Centralia-WA,Centralia,WA,USA,46.7284,-122.951

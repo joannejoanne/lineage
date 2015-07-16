@@ -1,0 +1,23 @@
+
+
+1) 
+
+select origin_coord_name as origin, dest_coord_name as destination, sum(Weight)/20000+.01 as count from shipment_master_lat_lon where origin_lon is not null and dest_lon is not null and origin_coord_name is not null and dest_coord_name is not null and origin_coord_name <> dest_coord_name and overlap=0 and round(origin_lon,2) <> round(dest_lon,2) and round(origin_lat,2) <> round(dest_lat,2) group by origin_coord_name,dest_coord_name order by count desc INTO OUTFILE '/tmp/output_origin3.csv' FIELDS TERMINATED BY ',' LINES TERMINATED BY  '\n' ;
+
+
+
+2) 
+select dest_coord_name as origin, origin_coord_name as destination, sum(Weight)/20000+.01 as count from shipment_master_lat_lon where origin_lon is not null and dest_lon is not null and origin_coord_name is not null and dest_coord_name is not null and origin_coord_name <> dest_coord_name and overlap=0 and round(origin_lon,2) <> round(dest_lon,2) and round(origin_lat,2) <> round(dest_lat,2) group by origin_coord_name,dest_coord_name order by count desc INTO OUTFILE '/tmp/output_destination4.csv' FIELDS TERMINATED BY ',' LINES TERMINATED BY  '\n' ;
+
+
+
+maplocs:
+1) 
+select origin_coord_name as iata, concat('Origin-',origin_std_city,'-',origin_std_state) as name, 
+origin_std_state as state, 'USA' as country, origin_lat as latitude, origin_lon as longitude, 1 as lineage from shipment_master_lat_lon where origin_lon is not null and dest_lon is not null and overlap=0
+group by origin_coord_name INTO OUTFILE '/tmp/origin_data.csv' FIELDS TERMINATED BY ',' LINES TERMINATED BY  '\n' ;
+
+2) 
+select dest_coord_name as iata, concat('Destination-',dest_std_city,'-',dest_std_state) as name, 
+dest_std_state as state, 'USA' as country, dest_lat as latitude, dest_lon as longitude, 0 as lineage from shipment_master_lat_lon where origin_lon is not null and dest_lon is not null and overlap=0
+group by dest_coord_name INTO OUTFILE '/tmp/destination_data.csv' FIELDS TERMINATED BY ',' LINES TERMINATED BY  '\n' ;

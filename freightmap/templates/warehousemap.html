@@ -1,0 +1,77 @@
+{% load staticfiles %}
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static "map/warehousemap.css" %}"/> 
+    <title> Warehouse Map </title>
+  	</head>
+
+  <body>
+   <img src="{% static "img/lineage.jpg" %}" alt="logo" style="width:220px;height:60px;">
+
+<!-- <div id="container" style="position: relative; width: 500px; height: 300px;"></div>
+
+ -->
+
+	<div class="header"> Warehouse Map </div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+<script src="http://datamaps.github.io/scripts/datamaps.all.min.js"></script>
+<div id="container" style="position: relative; width: 1500px; height: 680px;"></div>
+<script>
+    //  var map = new Datamap({
+    //     element: document.getElementById('container'),
+    //     scope: 'usa', 
+    //     fills: {
+    // defaultFill: "#7ec0ee" }
+
+    // });
+
+
+ 
+var WarehouseMap = new Datamap({
+    element: document.getElementById('container'),
+    scope: 'usa',
+    geographyConfig: {
+        popupOnHover: false,
+        highlightOnHover: false
+    },
+    fills: {
+    	// 'RUS': '#9467bd',
+    	'RUS': 'yellow', 
+        defaultFill: '#7ec0ee'
+    }, 
+    data: {
+    	'RUS': {fillKey: 'RUS'},
+    }
+});
+ 
+//draw bubbles for bombs
+WarehouseMap.bubbles( {{data|safe}} , {
+    popupTemplate:function (geography, data) { 
+            return ['<div class="hoverinfo"><strong>' +  data.name + '</strong>',
+            '<br/>ID: ' +  data.id,
+            '<br/>Phone: ' +  data.phone,
+            '<br/>City: ' +  data.city,
+            '<br/>State: ' +  data.state,
+            '<br/>Country: ' +  data.country,
+            '<br/>Zipcode: ' +  data.zip,
+            '</div>'].join('');
+    }
+});
+
+
+
+</script>
+
+
+
+  </body>
+
+</html> 
+
+
+
