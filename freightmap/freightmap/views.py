@@ -1,15 +1,71 @@
 from django.shortcuts import render_to_response 
 from map.models import ShipmentMasterLatLon, Warehouses
 import csv
+import os, sys
 from django.http import HttpResponse
 from geopy.geocoders import Nominatim
+from django.db.models import Sum
+import ast
+import json 
 
+
+# def zipcode_2digit(request):
+# 	response = HttpResponse(content_type='text/csv')
+# 	response['Content-Disposition'] = 'attachment; filename="zipcode_2digit.csv"'
+# 	writer = csv.writer(response)
+
+# 	writer.writerow(['zip', 'location', 'destination', 'weight', 'volume', 'latitude', 'longitude', 'lineage'])
+# 	all_objs = ShipmentMasterLatLon.objects.filter(overlap=0, dest_lon__isnull=False, origin_lon__isnull=False)
+# 	for each in all_objs: 
+# 		iata = each.origin_coord_name
+# 		name = 'Origin-' + each.origin_std_city + '-' + each.origin_std_state 
+# 		state = each.origin_std_state
+# 		country = 'USA'
+# 		latitude = each.origin_lat
+# 		longitude = each.origin_lon  
+# 		lineage = 1
+# 		writer.writerow([iata, name, state, country, latitude, longitude, lineage])
+# 	return response	
+
+
+
+def sample(request): 
+	zipcode = {"93": {"weight": 352, "volume": 12}, "35": {"weight": 112, "volume": 93}}
+	return render_to_response('sample.html', {"zipcode": zipcode})
+	
 
 
 def home(request):
 	# all_objs = ShipmentMasterLatLon.objects.filter(overlap=0, dest_lon__isnull=False, origin_lon__isnull=False)
 
 	return render_to_response('home.html', {})
+
+def newhome(request):
+	# all_objs = ShipmentMasterLatLon.objects.filter(overlap=0, dest_lon__isnull=False, origin_lon__isnull=False)
+	
+	file = os.path.join(os.path.dirname(os.path.dirname(__file__)),'freightmap/zipcodelist.csv')
+	reader = csv.DictReader(open(file))
+	zipcodelist = {}
+	for row in reader:
+		eachloc = {} 
+		eachloc["origin"] = row['origin']
+		totalcube = ast.literal_eval(row['totalcube'])
+		weight = ast.literal_eval(row['weight'])
+		eachloc["weight"] = weight['weight__sum']
+		eachloc['totalcube'] = totalcube['totalcube__sum']
+ 		zipcodelist[row['zipcoderegion']] = eachloc 
+ # 	reader = csv.reader(open('zipcodelist.csv', 'r'))
+	# zipcodelist = {}
+	# for row in reader: 
+	# 	zipcodekey, weight, totalcube = row
+	# 	eachloc = {}
+	# 	eachloc["weight"] = weight
+	# 	eachloc["totalcube"] = totalcube 
+	# 	zipcodelist[zipcodekey] = eachloc  
+
+
+       
+	return render_to_response('home-zipcode.html', {'zipcodelist': json.dumps(zipcodelist)})
 
 
 def home_expanded(request):
@@ -96,7 +152,7 @@ def render(request):
 	response = HttpResponse(content_type='text/csv')
 	response['Content-Disposition'] = 'attachment; filename="realorigin.csv"'
 	writer = csv.writer(response)
-	writer.writerow(['iata', 'name', 'state', 'country', 'latitude', 'longitude', 'lineage'])
+	writer.writerow(['iata', 'name', 'state', 'country', 'latitude', 'longitude', 'lineage', 'zipregion', 'aggweight', 'aggvolume'])
 	all_objs = ShipmentMasterLatLon.objects.filter(overlap=0, dest_lon__isnull=False, origin_lon__isnull=False)
 	for each in all_objs: 
 		iata = each.origin_coord_name
@@ -106,7 +162,8 @@ def render(request):
 		latitude = each.origin_lat
 		longitude = each.origin_lon  
 		lineage = 1
-		writer.writerow([iata, name, state, country, latitude, longitude, lineage])
+		zipregion = each.originzip[:2]
+		writer.writerow([iata, name, state, country, latitude, longitude, lineage, zipregion])
 	return response	
 
 def paths(request):

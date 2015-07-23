@@ -12,10 +12,18 @@
 
 th {
     text-align: left;
+    	 padding-left: 10px;
+    padding-right: 10px;
+}
+
+td {
+		 padding-left: 10px;
+    padding-right: 10px;
 }
 
 a {
     color: grey;
+
 }
 
 

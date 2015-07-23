@@ -28,6 +28,9 @@ urlpatterns = patterns('',
     (r'^Destination-(?P<code>[-\w]+)', views.destination),  
     (r'^warehouses$', views.warehouses),
     (r'^freight$', views.home),
+    (r'^map$', views.newhome),
+    (r'^sample$', views.sample),
+
     (r'^expanded$', views.home_expanded),
     (r'^warehouseinit$', views.warehouse_init),
     (r'^warehousemap$', views.warehousemap)
