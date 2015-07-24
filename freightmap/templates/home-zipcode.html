@@ -5,7 +5,9 @@
   <head>
   <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
   
+
     <link rel="stylesheet" type="text/css" href="{% static "map/style.css" %}"/> 
+    <script src="{% static "map/jquery-1.11.3.min.js" %}"> </script>
 
 
     <style type="text/css">
@@ -74,12 +76,15 @@ rect {
     
 
 <div class="segmented-control" id="button" style="width: 300px; color: #FFB6C1">
-    <input type="radio" name="sb" id="sb-1" checked onclick="check_weight(this);">
-    <input type="radio" name="sb" id="sb-2" onclick="check_cube(this);">
+    <input type="radio" name="sb" id="sb-1" onclick="check_distance(this);">
+    <input type="radio" name="sb" id="sb-2" checked onclick="check_weight(this);">
+    <input type="radio" name="sb" id="sb-3" onclick="check_cube(this);">
+
+
     
-  
-    <label for="sb-1" data-value="Weight">Weight</label>
-    <label for="sb-2" data-value="Total Cube">Total Cube</label>
+    <label for="sb-1" data-value="Distance">Distance</label>  
+    <label for="sb-2" data-value="Weight">Weight</label>
+    <label for="sb-3" data-value="Volume">Volume</label>
 
 
 </div>
@@ -90,8 +95,11 @@ rect {
 
 
 <div id="infobox-header"> &nbsp; </div>
-<div id="info"> &nbsp; 
 
+
+<div id="allinfo"> 
+<div id="info"> &nbsp; 
+</div>
 
 </div>
 </div>
@@ -117,6 +125,12 @@ rect {
 
      }
 
+      function check_distance(button) {
+      checked_option = "distance";
+
+     }
+
+
      var source, destination;
 
      function clear() {
@@ -127,6 +141,8 @@ rect {
 
      clear(); 
      function set_header(origin) {
+
+     
       var infobox_header = document.createElement('div');
                     infobox_header.setAttribute('id',"infobox-header");
                     infobox_header.innerHTML = "<br> <br> To " +  origin + " from...";
@@ -137,7 +153,12 @@ rect {
 
 
      function set_header_origin(origin) {
+
+
+
+
       var infobox_header = document.createElement('div');
+
       var mod_origin = origin.split('Origin-').join('');
       mod_origin = mod_origin.split('-').join(','); 
       mod_origin = mod_origin.split(',').join(', '); 
@@ -149,6 +170,9 @@ rect {
 
 
      function set_header_dest(destination) {
+
+
+
       var infobox_header = document.createElement('div');
        var mod_dest = destination.split('Destination-').join('');
       mod_dest = mod_dest.split('-').join(','); 
@@ -345,32 +369,137 @@ flights.forEach(function(flight) {
 // console.log(d3.geom.voronoi(projection(locationByAirport["32.7851-89.5064"]))); 
 // gives 
 
-  function generate_info_zipcode(zipcoderegion, weight, totalcube, state) {
-        
-        var infobox = document.getElementById("infobox");     
-  
+ function commaSeparateNumber(val){
+    while (/(\d+)(\d{3})/.test(val.toString())){
+      val = val.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
+    }
+    return val;
+  }
 
+
+
+  function sortByWeight() {
+    // var info = document.getElementsByClassName('info').get(); 
+    var $info = $("div[id^='allinfo']").get();
+
+            // var count = $('#allinfo').length;
+            // console.log(count); 
+
+            // if (count == 1) {
+            //   return;  
+            // }
+
+
+    
+    var weight_div = $info.sort(function (a, b) {
+        return parseInt($(a).find("#weight").text()) < parseInt($(b).find("#weight").text()) ? 1 : -1 ;
+
+    })
+
+
+
+      var infobox_header = document.getElementById("infobox-header").innerHTML; 
+
+    
+  
+         $("#infobox").html(infobox_header);
+    
+
+    for (i = 0; i < weight_div.length; i++) {
+    
+
+
+
+
+         $("#infobox").append(weight_div);
+
+
+    }
+$('[id=weight]').css('color', 'red').css('font-weight', 'bold');
+
+
+
+    
+
+
+      
+}
+
+ function sortbyTotalCube() {
+    // var info = document.getElementsByClassName('info').get(); 
+    var $info = $("div[id^='allinfo']").get();
+
+            // var count = $('#allinfo').length;
+            // console.log(count); 
+
+            // if (count == 1) {
+            //   return;  
+            // }
+
+
+    
+    var cube_div = $info.sort(function (a, b) {
+        return parseInt($(a).find("#totalcube").text()) < parseInt($(b).find("#totalcube").text()) ? 1 : -1 ;
+
+    })
+
+
+
+      var infobox_header = document.getElementById("infobox-header").innerHTML; 
+
+    
+  
+         $("#infobox").html(infobox_header);
+    
+
+    for (i = 0; i < cube_div.length; i++) {
+    
+
+         $("#infobox").append(cube_div);
+
+
+    }
+$('[id=totalcube]').css('color', 'red').css('font-weight', 'bold');
+
+
+
+    
+
+
+      
+}
+
+
+
+
+
+
+
+
+   function generate_info_zipcode(zipcoderegion, weight, totalcube, state) {
+        
+        var infobox = document.getElementById("infobox"); 
+
+        var allinfo = document.createElement('div');
+        allinfo.setAttribute('id', "allinfo"); 
+
+        
         var dest_list = document.createElement('div');
         dest_list.setAttribute('id',"dest_list");
-
         dest_list.innerHTML = "<br> Zipcode region:<b> " +  zipcoderegion + "xxx" + " </b>" + "&nbsp;&nbsp;&nbsp;(" + state +  ")"; 
-
                    
                     // infobox.appendChild(infobox_header); 
-                    infobox.appendChild(dest_list); 
+                    allinfo.appendChild(dest_list); 
                     var new_weight = (weight  / 2000).toFixed(2); 
+                    new_weight = commaSeparateNumber(new_weight); 
                     var info = document.createElement('div');
-                    info.innerHTML = "<div id='info'> Weight: <label id='distance'> " + new_weight + "</label>" + " tons" + "<br> Total cube: <label id='duration'>" + totalcube + " </label>" + "cm <sup>3</sup>" + " </div> ";   
-
+                    info.innerHTML = "<div id='info'> Weight: <label id='weight'> " + new_weight + "</label>" + " tons" + "<br> Total cube: <label id='totalcube'>" + totalcube + " </label>" + "cm<sup>3</sup>" + " </div> ";   
                     // infobox-header.setAttribute('id',"info");
+                    allinfo.appendChild(info); 
 
-
-                    infobox.appendChild(info); 
-
-
-
-
+                    infobox.appendChild(allinfo); 
   }
+
 
 
 
@@ -449,6 +578,7 @@ var all_zip_region = [];
 
           var dest_list_obj = linksByOrigin[d.iata]; 
           var dest_list = []; 
+ 
           
           for (i = 0; i < dest_list_obj.length; i++) {
             var destination_location = dest_list_obj[i].target; 
@@ -489,13 +619,31 @@ var all_zip_region = [];
  
         
 
-            generate_info_zipcode(zipcodereg, obj[zipcodereg].weight, obj[zipcodereg].totalcube, actual_dest_info['state']); 
-            all_zip_region.push(zipcodereg); 
-             
+                generate_info_zipcode(zipcodereg, obj[zipcodereg].weight, obj[zipcodereg].totalcube, actual_dest_info['state'], i); 
+                all_zip_region.push(zipcodereg); 
+                 
             
           }
 
+
           } 
+
+
+          if (checked_option == "weight") {
+    
+            sortByWeight();
+          
+
+          }
+          else if (checked_option == "totalcube") {
+            sortbyTotalCube(); 
+          }
+
+          // else if (checked_option == "distance") {
+          //   sortByDistance(); 
+          // }
+
+
           // console.log(dest_list); 
           // initialize((d.latitude + ", " + d.longitude), "31.6948, -106.3"); 
           // initialize("Newport beach, CA", ["Phoeniz, AZ", "nYC, NY"]); 
