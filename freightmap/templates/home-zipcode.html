@@ -277,10 +277,10 @@ rect {
 //   alert( x.testing ); // Alerts "123"
 // });
 
+  
 
+       var individual_info = $(".info").get(count);
 
-       var allinfo = $(".allinfo").get(count);
-       
 
         //*********DIRECTIONS AND ROUTE**********************//
             source = fromsource; 
@@ -326,13 +326,31 @@ rect {
                     // // infobox.appendChild(infobox_header); 
                     // allinfo.appendChild(dest_list); 
 
-                    var info = document.createElement('div');
-                    info.innerHTML = "<div id='info'> Distance: <label id='distance'> " + distance_stripped + "&nbsp;km </label> <br> Time: <label id='duration'>" + duration + " </label> </div>  ";   
+                
 
                     // infobox-header.setAttribute('id',"info");
 
-                     allinfo.appendChild(info); 
+                     
+   function waitForElement(){
+    if(typeof individual_info !== "undefined"){
+        individual_info.innerHTML = individual_info.innerHTML + 
+        "<br> Distance: <label id='distance'> " + distance_stripped + "</label> &nbsp;km  <br> Time: <label id='duration'>" + duration + " </label> </div> ";   
 
+
+    }
+    else{
+        setTimeout(function(){
+            waitForElement();
+        },250);
+    }
+}
+
+waitForElement(); 
+
+
+                    
+
+                 
 
                     // document.getElementById("distance").appendChild(distance); 
                     // // document.getElementById("distance").innerHTML = distance; 
@@ -352,7 +370,11 @@ rect {
                 // } else {
                 //     alert("Unable to find the distance via road.");
                 // }
+
+
             });
+
+
 
 }
 
@@ -572,7 +594,10 @@ $('[id=totalcube]').css('color', 'red').css('font-weight', 'bold');
 
 
     var distance_div = $info.sort(function (a, b) {
-  
+        
+        
+        console.log($(a).find("#distance")); 
+
         return parseInt($(a).find("#distance").text()) < parseInt($(b).find("#distance").text()) ? 1 : -1 ;
 
     })
@@ -661,11 +686,12 @@ $('[id=duration]').css('color', 'red').css('font-weight', 'bold');
                     var new_weight = (weight  / 2000).toFixed(2); 
                     new_weight = commaSeparateNumber(new_weight); 
                     var info = document.createElement('div');
-                    info.innerHTML = "<div id='info'> Weight: <label id='weight'> " + new_weight + "</label>" + " tons" + "<br> Total cube: <label id='totalcube'>" + totalcube + " </label>" + "cm<sup>3</sup>" + " </div> ";   
+                    info.innerHTML = "<div id='info' class='info'> Weight: <label id='weight'> " + new_weight + "</label>" + " tons" + "<br> Total cube: <label id='totalcube'>" + totalcube + " </label>" + "cm<sup>3</sup>" ;   
                     // infobox-header.setAttribute('id',"info");
                     allinfo.appendChild(info); 
 
                     infobox.appendChild(allinfo); 
+                
   }
 
 
@@ -814,7 +840,12 @@ var all_zip_region = [];
           }
 
           else if (checked_option == "distance") {
-            sortByDistance(); 
+            
+              
+               sortByDistance(); 
+  
+
+            // sortByDistance(); 
           }
 
 
