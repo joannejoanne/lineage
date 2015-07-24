@@ -75,16 +75,18 @@ rect {
     <div id ="circlez"> </div> -->
     
 
-<div class="segmented-control" id="button" style="width: 300px; color: #FFB6C1">
+<div class="segmented-control" id="button" style="width: 310px; color: #FFB6C1">
     <input type="radio" name="sb" id="sb-1" onclick="check_distance(this);">
-    <input type="radio" name="sb" id="sb-2" checked onclick="check_weight(this);">
-    <input type="radio" name="sb" id="sb-3" onclick="check_cube(this);">
+     <input type="radio" name="sb" id="sb-2" onclick="check_time(this);">
+    <input type="radio" name="sb" id="sb-3" checked onclick="check_weight(this);">
+    <input type="radio" name="sb" id="sb-4" onclick="check_cube(this);">
 
 
     
     <label for="sb-1" data-value="Distance">Distance</label>  
-    <label for="sb-2" data-value="Weight">Weight</label>
-    <label for="sb-3" data-value="Volume">Volume</label>
+    <label for="sb-2" data-value="Time">Time</label>  
+    <label for="sb-3" data-value="Weight">Weight</label>
+    <label for="sb-4" data-value="Volume">Volume</label>
 
 
 </div>
@@ -97,7 +99,7 @@ rect {
 <div id="infobox-header"> &nbsp; </div>
 
 
-<div id="allinfo"> 
+<div id="allinfo" class="allinfo"> 
 <div id="info"> &nbsp; 
 </div>
 
@@ -127,6 +129,10 @@ rect {
 
       function check_distance(button) {
       checked_option = "distance";
+
+     }
+       function check_time(button) {
+      checked_option = "time";
 
      }
 
@@ -185,10 +191,97 @@ rect {
 
 
 
-    function initialize(fromsource, todestination_list) {
+//     function initialize(fromsource, todestination_list) {
 
-        var infobox = document.getElementById("infobox");     
+//         var infobox = document.getElementById("infobox");     
         
+//         //*********DIRECTIONS AND ROUTE**********************//
+//             source = fromsource; 
+//             // destination = "Los Angeles, CA"; 
+
+//             // for (i = 0; i < todestination_list.length; i++) {
+
+//             // destination = todestination_list[i]; 
+//             //*********DISTANCE AND DURATION**********************//
+//             var service = new google.maps.DistanceMatrixService();
+//             service.getDistanceMatrix({
+//                 origins: [source],
+//                 // destinations: [destination],
+//                 destinations: todestination_list, 
+//                 travelMode: google.maps.TravelMode.DRIVING,
+//                 unitSystem: google.maps.UnitSystem.METRIC,
+//                 avoidHighways: false,
+//                 avoidTolls: true
+//             }, function (response, status) {
+
+//                 if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
+                 
+
+//                     // set_header(response.originAddresses[0] );
+
+//                     // var infobox_header = document.createElement('div');
+//                     // infobox_header.setAttribute('id',"infobox-header");
+//                     // infobox_header.innerHTML = response.originAddresses[0] + " to ...";  
+
+
+//                   for (i = 0; i < todestination_list.length; i++) {
+//                     var distance = response.rows[0].elements[i].distance.text;
+//                     var duration = response.rows[0].elements[i].duration.text;
+        
+
+
+//                      var dest_list = document.createElement('div');
+//                     dest_list.setAttribute('id',"dest_list");
+//                     dest_list.innerHTML = "<br> <b>" + response.destinationAddresses[i] + "</b>";  
+
+                   
+//                     // infobox.appendChild(infobox_header); 
+//                     allinfo.appendChild(dest_list); 
+
+//                     var info = document.createElement('div');
+//                     info.innerHTML = "<div id='info'> Distance: <label id='distance'> " + distance + "</label> <br> Duration: <label id='duration'>" + duration + " </label> </div> ";   
+
+//                     // infobox-header.setAttribute('id',"info");
+
+
+//                     allinfo.appendChild(info); 
+
+
+//                     // document.getElementById("distance").appendChild(distance); 
+//                     // // document.getElementById("distance").innerHTML = distance; 
+//                     // document.getElementById("duration").innerHTML = duration; 
+
+//                     // var dvDistance = document.getElementById("dvDistance");
+//                     // dvDistance.innerHTML = "";
+//                     // dvDistance.innerHTML += "Distance: " + distance + "<br />";
+//                     // dvDistance.innerHTML += "Duration:" + duration;
+//                     // console.log(distance); 
+//                     // console.log(duration);
+//                     // console.log("distance = " + distance + " and duration = " + duration); 
+//                     // document.getElementById("distance").innerHTML = distance;
+//                     // document.getElementById("duration").innerHTML = duration; 
+//                     }
+//                   }
+//                 // } else {
+//                 //     alert("Unable to find the distance via road.");
+//                 // }
+//             });
+      
+// }
+
+
+    function get_distance_duration(fromsource, todestination, count) {
+      
+
+//       $.when( { testing: 123 } ).done(function( x ) {
+//   alert( x.testing ); // Alerts "123"
+// });
+
+
+
+       var allinfo = $(".allinfo").get(count);
+       
+
         //*********DIRECTIONS AND ROUTE**********************//
             source = fromsource; 
             // destination = "Los Angeles, CA"; 
@@ -200,8 +293,8 @@ rect {
             var service = new google.maps.DistanceMatrixService();
             service.getDistanceMatrix({
                 origins: [source],
-                // destinations: [destination],
-                destinations: todestination_list, 
+                destinations: [todestination],
+                // destinations: todestination_list, 
                 travelMode: google.maps.TravelMode.DRIVING,
                 unitSystem: google.maps.UnitSystem.METRIC,
                 avoidHighways: false,
@@ -211,37 +304,34 @@ rect {
                 if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
                  
 
-                    set_header(response.originAddresses[0] ); 
+                    // set_header(response.originAddresses[0] );
+                     
+
                     // var infobox_header = document.createElement('div');
                     // infobox_header.setAttribute('id',"infobox-header");
                     // infobox_header.innerHTML = response.originAddresses[0] + " to ...";  
 
 
-                  for (i = 0; i < todestination_list.length; i++) {
-                    var distance = response.rows[0].elements[i].distance.text;
-                    var duration = response.rows[0].elements[i].duration.text;
+                  
+                    var distance = response.rows[0].elements[0].distance.text;
+                    var duration = response.rows[0].elements[0].duration.text;
         
+                    var distance_stripped = distance.split(' km').join(''); 
 
-
-                     var dest_list = document.createElement('div');
-                    dest_list.setAttribute('id',"dest_list");
-                    dest_list.innerHTML = "<br> <b>" + response.destinationAddresses[i] + "</b>";  
+                    //  var dest_list = document.createElement('div');
+                    // dest_list.setAttribute('id',"dest_list");
+                    // dest_list.innerHTML = "<br> <b>" + response.destinationAddresses[i] + "</b>";  
 
                    
-                    // infobox.appendChild(infobox_header); 
-                    infobox.appendChild(dest_list); 
+                    // // infobox.appendChild(infobox_header); 
+                    // allinfo.appendChild(dest_list); 
 
                     var info = document.createElement('div');
-                    info.innerHTML = "<div id='info'> Distance: <label id='distance'> " + distance + "</label> <br> Duration: <label id='duration'>" + duration + " </label> </div> ";   
+                    info.innerHTML = "<div id='info'> Distance: <label id='distance'> " + distance_stripped + "&nbsp;km </label> <br> Time: <label id='duration'>" + duration + " </label> </div>  ";   
 
                     // infobox-header.setAttribute('id',"info");
 
-
-                    infobox.appendChild(info); 
-
-
-
-
+                     allinfo.appendChild(info); 
 
 
                     // document.getElementById("distance").appendChild(distance); 
@@ -258,13 +348,17 @@ rect {
                     // document.getElementById("distance").innerHTML = distance;
                     // document.getElementById("duration").innerHTML = duration; 
                     }
-                  }
+                    // }
                 // } else {
                 //     alert("Unable to find the distance via road.");
                 // }
             });
-      
+
 }
+
+
+
+
 
 
 
@@ -461,14 +555,87 @@ $('[id=weight]').css('color', 'red').css('font-weight', 'bold');
     }
 $('[id=totalcube]').css('color', 'red').css('font-weight', 'bold');
 
+}
+
+
+
+ function sortByDistance() {
+    // var info = document.getElementsByClassName('info').get(); 
+    var $info = $("div[id^='allinfo']").get();
+
+            // var count = $('#allinfo').length;
+            // console.log(count); 
+
+            // if (count == 1) {
+            //   return;  
+            // }
+
+
+    var distance_div = $info.sort(function (a, b) {
+  
+        return parseInt($(a).find("#distance").text()) < parseInt($(b).find("#distance").text()) ? 1 : -1 ;
+
+    })
+
+
+
+      var infobox_header = document.getElementById("infobox-header").innerHTML; 
+
+    
+  
+         $("#infobox").html(infobox_header);
+    
+
+    for (i = 0; i < distance_div.length; i++) {
+    
+
+         $("#infobox").append(distance_div);
+
+
+    }
+$('[id=distance]').css('color', 'red').css('font-weight', 'bold');
+   
+}
+
+
+
+ function sortbyTime() {
+    // var info = document.getElementsByClassName('info').get(); 
+    var $info = $("div[id^='allinfo']").get();
+
+            // var count = $('#allinfo').length;
+            // console.log(count); 
+
+            // if (count == 1) {
+            //   return;  
+            // }
 
 
     
+    var time_div = $info.sort(function (a, b) {
+        return parseInt($(a).find("#duration").text()) < parseInt($(b).find("#duration").text()) ? 1 : -1 ;
+
+    })
 
 
-      
+
+      var infobox_header = document.getElementById("infobox-header").innerHTML; 
+
+    
+  
+         $("#infobox").html(infobox_header);
+    
+
+    for (i = 0; i < time_div.length; i++) {
+    
+
+         $("#infobox").append(time_div);
+
+
+    }
+$('[id=duration]').css('color', 'red').css('font-weight', 'bold');
+   
 }
-
 
 
 
@@ -482,6 +649,7 @@ $('[id=totalcube]').css('color', 'red').css('font-weight', 'bold');
 
         var allinfo = document.createElement('div');
         allinfo.setAttribute('id', "allinfo"); 
+        allinfo.setAttribute('class', "allinfo"); 
 
         
         var dest_list = document.createElement('div');
@@ -586,7 +754,7 @@ var all_zip_region = [];
             
             var dest_lon = destination_location.substring(destination_location.indexOf('-'), destination_location.length - 1);
             var dest_name = dest_lat + ", " + dest_lon; 
-            dest_list.push(dest_name); 
+            // dest_list.push(dest_name); 
       
             // console.log(airports.filter(getdestname(destination_location))); 
             var actual_dest_name = airports.filter(getdestname(destination_location))[0]; 
@@ -625,8 +793,10 @@ var all_zip_region = [];
             
           }
 
+                get_distance_duration((d.latitude + ", " + d.longitude), dest_name, i);
 
           } 
+
 
 
           if (checked_option == "weight") {
@@ -639,9 +809,13 @@ var all_zip_region = [];
             sortbyTotalCube(); 
           }
 
-          // else if (checked_option == "distance") {
-          //   sortByDistance(); 
-          // }
+          else if (checked_option == "time") {
+            sortbyTime(); 
+          }
+
+          else if (checked_option == "distance") {
+            sortByDistance(); 
+          }
 
 
           // console.log(dest_list); 
@@ -661,7 +835,7 @@ var all_zip_region = [];
         });
 
 
-    console.log(countByAirport); 
+    // console.log(countByAirport); 
 
     g.selectAll("path.arc")
         .data(function(d) { return linksByOrigin[d.iata] || []; })

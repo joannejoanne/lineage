@@ -153,13 +153,13 @@ body > svg {
 word-wrap: break-word;
 }
 
-#distance{
+/*#distance{
   color: blue;
 }
 
 #duration {
   color: blue;
-}
+}*/
 
 
 #info {
@@ -380,5 +380,5 @@ word-wrap: break-word;
 
 #button {
   margin-top: -10px;
-  margin-left: 1100px;
+  margin-left: 1083px;
 }
