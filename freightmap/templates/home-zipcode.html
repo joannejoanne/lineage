@@ -116,6 +116,53 @@ rect {
     <script type="text/javascript">
 
     var checked_option = "weight";
+ function sortByDistance() {
+    // var info = document.getElementsByClassName('info').get(); 
+    var $info = $("div[id^='allinfo']").get();
+
+
+            // var count = $('#allinfo').length;
+            // console.log(count); 
+
+            // if (count == 1) {
+            //   return;  
+            // }
+
+
+    var distance_div = $info.sort(function (a, b) {
+        // console.log($(a).find("#distance")); 
+        
+
+
+        return parseInt($(a).find("#distance").text()) < parseInt($(b).find("#distance").text()) ? 1 : -1 ;
+
+    })
+
+
+
+
+
+      var infobox_header = document.getElementById("infobox-header").innerHTML; 
+
+    
+  
+         $("#infobox").html(infobox_header);
+    
+
+    for (i = 0; i < distance_div.length; i++) {
+    
+
+         $("#infobox").append(distance_div);
+
+
+    }
+$('[id=distance]').css('color', 'red').css('font-weight', 'bold');
+console.log("done"); 
+
+
+
+   
+}
 
      function check_weight(button) {
       checked_option = "weight"; 
@@ -270,7 +317,7 @@ rect {
 // }
 
 
-    function get_distance_duration(fromsource, todestination, count) {
+    function get_distance_duration(fromsource, todestination, count, last_count) {
       
 
 //       $.when( { testing: 123 } ).done(function( x ) {
@@ -278,7 +325,6 @@ rect {
 // });
 
   
-
        var individual_info = $(".info").get(count);
 
 
@@ -333,9 +379,18 @@ rect {
                      
    function waitForElement(){
     if(typeof individual_info !== "undefined"){
+        
         individual_info.innerHTML = individual_info.innerHTML + 
-        "<br> Distance: <label id='distance'> " + distance_stripped + "</label> &nbsp;km  <br> Time: <label id='duration'>" + duration + " </label> </div> ";   
+        "<br> Distance: <label id='distance' class='distance'> " + distance_stripped + "</label> &nbsp;km  <br> Time: <label id='duration'>" + duration + " </label> </div> ";   
+        console.log("hi"); 
 
+    if (last_count == count) {
+      if (checked_option == "distance") {
+
+        console.log('intermediate'); 
+        sortByDistance(); 
+      }
+}
 
     }
     else{
@@ -581,50 +636,7 @@ $('[id=totalcube]').css('color', 'red').css('font-weight', 'bold');
 
 
 
- function sortByDistance() {
-    // var info = document.getElementsByClassName('info').get(); 
-    var $info = $("div[id^='allinfo']").get();
 
-
-            // var count = $('#allinfo').length;
-            // console.log(count); 
-
-            // if (count == 1) {
-            //   return;  
-            // }
-
-
-    var distance_div = $info.sort(function (a, b) {
-        // console.log($(a).find("#distance")); 
-        
-
-
-        return parseInt($(a).find("#distance").text()) < parseInt($(b).find("#distance").text()) ? 1 : -1 ;
-
-    })
-
-
-
-      var infobox_header = document.getElementById("infobox-header").innerHTML; 
-
-    
-  
-         $("#infobox").html(infobox_header);
-    
-
-    for (i = 0; i < distance_div.length; i++) {
-    
-
-         $("#infobox").append(distance_div);
-
-
-    }
-$('[id=weight]').css('color', 'red').css('font-weight', 'bold');
-
-
-console.log($('[id=distance]')); 
-   
-}
 
 
 
@@ -774,6 +786,7 @@ var all_zip_region = [];
               }
 
 
+
           var dest_list_obj = linksByOrigin[d.iata]; 
           var dest_list = []; 
  
@@ -823,7 +836,7 @@ var all_zip_region = [];
             
           }
 
-                get_distance_duration((d.latitude + ", " + d.longitude), dest_name, i, dest_list_obj.length);
+                get_distance_duration((d.latitude + ", " + d.longitude), dest_name, i, dest_list_obj.length - 1);
 
           } 
 
@@ -843,31 +856,31 @@ var all_zip_region = [];
             sortbyTime(); 
           }
 
-          else if (checked_option == "distance") {
+//           else if (checked_option == "distance") {
 
 
                      
-   function waitForDistance(){
-    if( $() !== "undefined"){
-                  sortByDistance(); 
+//    function waitForDistance(){
+//     if( $() !== "undefined"){
+//                   sortByDistance(); 
 
-    }
-    else{
-        setTimeout(function(){
-            waitForDistance();
-        },250);
-    }
-}
+//     }
+//     else{
+//         setTimeout(function(){
+//             waitForDistance();
+//         },250);
+//     }
+// }
 
-waitForDistance(); 
+// waitForDistance(); 
 
 
 
  
   
 
-            // sortByDistance(); 
-          }
+//             // sortByDistance(); 
+//           }
 
 
           // console.log(dest_list); 
