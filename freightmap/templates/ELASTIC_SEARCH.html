@@ -54,6 +54,29 @@ rect {
   </head>
   <body>
 
+
+
+
+
+<div id="customer"> 
+<form >
+    <input class="awesomplete" id="customer_box"
+       data-list="
+
+       {% for each in customer %} 
+        {{each}}, 
+        {% endfor %}
+       " placeholder="Customer Name" required>
+    
+
+    <input type="button" class="button" value="Search" onclick="findCustomer()">
+</form>
+</div>
+
+
+
+
+
 <div id="search"> 
 <form >
     <input class="awesomplete" id="origin_box"
@@ -92,15 +115,15 @@ rect {
     
 
 <div class="segmented-control" id="button" style="width: 310px; color: #FFB6C1">
-    <input type="radio" name="sb" id="sb-1" onclick="check_distance(this);">
-     <input type="radio" name="sb" id="sb-2" onclick="check_time(this);">
+   <!--  <input type="radio" name="sb" id="sb-1" onclick="check_distance(this);">
+     <input type="radio" name="sb" id="sb-2" onclick="check_time(this);"> -->
     <input type="radio" name="sb" id="sb-3" checked onclick="check_weight(this);">
     <input type="radio" name="sb" id="sb-4" onclick="check_cube(this);">
 
 
-    
+    <!-- 
     <label for="sb-1" data-value="Distance">Distance</label>  
-    <label for="sb-2" data-value="Time">Time</label>  
+    <label for="sb-2" data-value="Time">Time</label>  --> 
     <label for="sb-3" data-value="Weight">Weight</label>
     <label for="sb-4" data-value="Volume">Volume</label>
 
@@ -136,6 +159,27 @@ rect {
       all_count = {}; 
 
 
+  // var customer_directory = {{  customer_directory | safe }};
+
+
+  function findCustomer() {
+    var customer = document.getElementById('customer_box').value; 
+
+    function set_header(customer) {
+     var infobox_header = document.getElementById('infobox-header'); 
+      infobox_header.innerHTML = "<br> <br> For <b>" +  customer + "</b>..."; 
+    }
+
+    set_header(customer); 
+
+
+    // alert(customer_directory.customer); 
+
+
+
+
+
+}
 
  function sortByDistance() {
     // var info = document.getElementsByClassName('info').get(); 
@@ -146,20 +190,31 @@ rect {
             //   return;  
             // }
     var distance_div = $info.sort(function (a, b) {
-        // console.log($(a).find("#distance")); 
-        
+        console.log($(a).find("#distance").text()); 
         return parseInt($(a).find("#distance").text()) < parseInt($(b).find("#distance").text()) ? 1 : -1 ;
     })
-      var infobox_header = document.getElementById("infobox-header").innerHTML; 
+
+
+      // var mid = document.getElementById("infobox-header"); 
+      // var infobox_header = mid.innerHTML; 
     
   
-         $("#infobox").html(infobox_header);
+      //    $("#infobox").html(infobox_header);
     
     for (i = 0; i < distance_div.length; i++) {
     
          $("#infobox").append(distance_div);
     }
-$('[id=distance]').css('color', 'red').css('font-weight', 'bold');
+
+
+
+        setTimeout(function(){
+        $('[id=distance]').css('color', 'red').css('font-weight', 'bold');
+        },250);
+    
+
+
+
 
    
 }
@@ -177,10 +232,16 @@ $('[id=distance]').css('color', 'red').css('font-weight', 'bold');
       checked_option = "time";
      }
      var source, destination;
+
      function clear() {
-              var infobox = document.getElementById("infobox"); 
-        infobox.innerHTML = ""; 
+        var infobox = document.getElementById("infobox"); 
+        infobox.innerHTML = "";
+         var infobox_header = document.createElement('div');
+      infobox_header.setAttribute('id',"infobox-header");
+      infobox.appendChild(infobox_header); 
+
      }
+
      clear(); 
 
 
@@ -194,23 +255,21 @@ function submitButton() {
 
   function set_header(origin, destination) {
       if (origin == "") { 
-        var infobox_header = document.createElement('div');
-      infobox_header.setAttribute('id',"infobox-header");
+        var infobox_header = document.getElementById('infobox-header');
+ 
       infobox_header.innerHTML = "<br> <br> To <b>" +  destination + "</b> from...  "; 
       document.getElementById("infobox").appendChild(infobox_header);
 
       }
       else if (destination == "") {
-         var infobox_header = document.createElement('div');
-      infobox_header.setAttribute('id',"infobox-header");
+        var infobox_header = document.getElementById('infobox-header')
       infobox_header.innerHTML = "<br> <br> From <b>" +  origin + "</b> to...  "; 
       document.getElementById("infobox").appendChild(infobox_header);
 
       }
 
         else {
-      var infobox_header = document.createElement('div');
-      infobox_header.setAttribute('id',"infobox-header");
+     var infobox_header = document.getElementById('infobox-header')
       infobox_header.innerHTML = "<br> <br> From <b>" +  origin + "</b> to <b> " + destination + "</b>";
       document.getElementById("infobox").appendChild(infobox_header); 
     }
@@ -237,8 +296,72 @@ function submitButton() {
   }
 
 
+function sortByWeight() {
+    // var info = document.getElementsByClassName('info').get(); 
+    var $info = $("div[id^='allinfo']").get();
+            // var count = $('#allinfo').length;
+            // console.log(count); 
+            // if (count == 1) {
+            //   return;  
+            // }
+    
+    var weight_div = $info.sort(function (a, b) {
+        return parseInt($(a).find("#weight").text()) < parseInt($(b).find("#weight").text()) ? 1 : -1 ;
+    })
+      var infobox_header = document.getElementById("infobox-header").innerHTML; 
+    
+  
+         $("#infobox").html(infobox_header);
+    
+    for (i = 0; i < weight_div.length; i++) {
+    
+         $("#infobox").append(weight_div);
+    }
+$('[id=weight]').css('color', 'red').css('font-weight', 'bold');
+    
+      
+}
+
+function sortbyTotalCube() {
+    // var info = document.getElementsByClassName('info').get(); 
+    var $info = $("div[id^='allinfo']").get();
+            // var count = $('#allinfo').length;
+            // console.log(count); 
+            // if (count == 1) {
+            //   return;  
+            // }
+    
+    var cube_div = $info.sort(function (a, b) {
+        return parseInt($(a).find("#totalcube").text()) < parseInt($(b).find("#totalcube").text()) ? 1 : -1 ;
+    })
+      var infobox_header = document.getElementById("infobox-header").innerHTML; 
+    
+  
+         $("#infobox").html(infobox_header);
+    
+    for (i = 0; i < cube_div.length; i++) {
+    
+         $("#infobox").append(cube_div);
+    }
+$('[id=totalcube]').css('color', 'red').css('font-weight', 'bold');
+}
 
 
+
+  if (checked_option == "weight") {
+
+       setTimeout(function(){
+    sortByWeight(); 
+        },500);
+
+  }
+
+else if (checked_option == "totalcube") {
+  setTimeout(function(){
+    sortbyTotalCube(); 
+        },500);
+
+}
 
 
 
@@ -286,20 +409,19 @@ function submitButton() {
               document.getElementById("infobox").appendChild(infobox_header); 
      }
      function set_header_origin(origin) {
-      var infobox_header = document.createElement('div');
       var mod_origin = origin.split('Origin-').join('');
       mod_origin = mod_origin.split('-').join(','); 
       mod_origin = mod_origin.split(',').join(', '); 
-                    infobox_header.setAttribute('id',"infobox-header");
+      var infobox_header = document.getElementById('infobox-header'); 
                     infobox_header.innerHTML = "<br> <br> From <b>" +  mod_origin + "</b> to... ";
               document.getElementById("infobox").appendChild(infobox_header); 
      }
      function set_header_dest(destination) {
-      var infobox_header = document.createElement('div');
+  
        var mod_dest = destination.split('Destination-').join('');
       mod_dest = mod_dest.split('-').join(','); 
       mod_dest = mod_dest.split(',').join(', '); 
-                    infobox_header.setAttribute('id',"infobox-header");
+                      var infobox_header = document.getElementById('infobox-header'); 
                     infobox_header.innerHTML = "<br> <br> To <b>" +  mod_dest + "</b> from...";
               document.getElementById("infobox").appendChild(infobox_header); 
      }
@@ -415,7 +537,16 @@ function submitButton() {
     if (last_count == count) {
       if (checked_option == "distance") {
         
+                setTimeout(function(){
         sortByDistance(); 
+        },500);
+                    setTimeout(function(){
+        sortByDistance(); 
+        },500);
+            
+
+            
+     
       }
 }
     }
@@ -936,7 +1067,39 @@ $('[id=weight]').css('color', 'red').css('font-weight', 'bold');
     }
 $('[id=totalcube]').css('color', 'red').css('font-weight', 'bold');
 }
- function sortbyTime() {
+
+
+
+//  function sortbyTime() {
+//     // var info = document.getElementsByClassName('info').get(); 
+//     var $info = $("div[id^='allinfo']").get();
+//             // var count = $('#allinfo').length;
+//             // console.log(count); 
+//             // if (count == 1) {
+//             //   return;  
+//             // }
+    
+//     var time_div = $info.sort(function (a, b) {
+//         return parseInt($(a).find("#duration").text()) < parseInt($(b).find("#duration").text()) ? 1 : -1 ;
+//     })
+//       var infobox_header = document.getElementById("infobox-header").innerHTML; 
+    
+  
+//          $("#infobox").html(infobox_header);
+    
+//     for (i = 0; i < time_div.length; i++) {
+    
+//          $("#infobox").append(time_div);
+//     }
+// $('[id=duration]').css('color', 'red').css('font-weight', 'bold');
+   
+// }
+
+
+
+
+
+function sortbyTime() {
     // var info = document.getElementsByClassName('info').get(); 
     var $info = $("div[id^='allinfo']").get();
             // var count = $('#allinfo').length;
@@ -944,22 +1107,38 @@ $('[id=totalcube]').css('color', 'red').css('font-weight', 'bold');
             // if (count == 1) {
             //   return;  
             // }
-    
-    var time_div = $info.sort(function (a, b) {
-        return parseInt($(a).find("#duration").text()) < parseInt($(b).find("#duration").text()) ? 1 : -1 ;
+    var distance_div = $info.sort(function (a, b) {
+        // console.log($(a).find("#distance")); 
+        
+        return parseInt($(a).find("#distance").text()) < parseInt($(b).find("#distance").text()) ? 1 : -1 ;
     })
-      var infobox_header = document.getElementById("infobox-header").innerHTML; 
+
+
+      var mid = document.getElementById("infobox-header"); 
+      var infobox_header = mid.innerHTML; 
     
   
          $("#infobox").html(infobox_header);
     
-    for (i = 0; i < time_div.length; i++) {
+    for (i = 0; i < distance_div.length; i++) {
     
-         $("#infobox").append(time_div);
+         $("#infobox").append(distance_div);
     }
-$('[id=totalcube]').css('color', 'red').css('font-weight', 'bold');
+
+
+
+        setTimeout(function(){
+$('[id=duration]').css('color', 'red').css('font-weight', 'bold');
+        },250);
+    
+
+
+
+
    
 }
+
+
    function generate_info_zipcode(zipcoderegion, weight, totalcube, state) {
         
         var infobox = document.getElementById("infobox"); 
@@ -1078,8 +1257,14 @@ var all_zip_region = [];
           else if (checked_option == "time") {
             sortbyTime(); 
           }
-//           else if (checked_option == "distance") {
-                     
+
+
+          else if (checked_option == "distance") {
+                            setTimeout(function(){
+          sortByDistance(); 
+        },500);    
+     
+                   }  
 //    function waitForDistance(){
 //     if( $() !== "undefined"){
 //                   sortByDistance(); 
@@ -1202,7 +1387,6 @@ var all_zip_region = [];
     <script type="text/template" id="search_info"> 
     </script>
  -->
-
 
 
   </body>
