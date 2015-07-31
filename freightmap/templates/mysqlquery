@@ -14,8 +14,11 @@ select dest_coord_name as origin, origin_coord_name as destination, sum(Weight)/
 maplocs:
 1) 
 select origin_coord_name as iata, concat('Origin-',origin_std_city,'-',origin_std_state) as name, 
-origin_std_state as state, 'USA' as country, origin_lat as latitude, origin_lon as longitude, 1 as lineage, LEFT(originzip , 2) as zipcoderegion from shipment_master_lat_lon where origin_lon is not null and dest_lon is not null and overlap=0
-group by origin_coord_name INTO OUTFILE '/tmp/origin_data.csv' FIELDS TERMINATED BY ',' LINES TERMINATED BY  '\n' ;
+origin_std_state as state, 'USA' as country, origin_lat as latitude, origin_lon as longitude, 1 as lineage, LEFT(originzip , 2) as zipcoderegion,
+
+
+
+ (SELECT custname FROM shipment_master_lat_lon where origin_coord_name = iata) as custname from shipment_master_lat_lon where origin_lon is not null and dest_lon is not null and overlap=0 group by origin_coord_name INTO OUTFILE '/tmp/origin_data1.csv' FIELDS TERMINATED BY ',' LINES TERMINATED BY  '\n' ;
 
 2) 
 select dest_coord_name as iata, concat('Destination-',dest_std_city,'-',dest_std_state) as name, 

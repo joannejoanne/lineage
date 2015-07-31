@@ -97,10 +97,53 @@ def newhome(request):
 	# 	zipcodelist[zipcodekey] = eachloc  
 
 
-
-	return render_to_response('ELASTIC_SEARCH.html', {'zipcodelist': json.dumps(zipcodelist), 'customer_directory': customer_directory, 'customer': customer, 'destination': destination_cities, 'origin': origin_cities})       
+	return render_to_response('customer_implement.html', {'zipcodelist': json.dumps(zipcodelist), 'customer_directory': customer_directory, 'customer': customer, 'destination': destination_cities, 'origin': origin_cities})       
+	# return render_to_response('ELASTIC_SEARCH.html', {'zipcodelist': json.dumps(zipcodelist), 'customer_directory': customer_directory, 'customer': customer, 'destination': destination_cities, 'origin': origin_cities})       
 	# return render_to_response('home-zipcode.html', {'zipcodelist': json.dumps(zipcodelist), 'destination': destination_cities, 'origin': origin_cities})
 	# return render_to_response('home-NEWEST.html', {'zipcodelist': json.dumps(zipcodelist)})
+
+
+
+def oldhome(request):
+	# all_objs = ShipmentMasterLatLon.objects.filter(overlap=0, dest_lon__isnull=False, origin_lon__isnull=False)
+	
+	file = os.path.join(os.path.dirname(os.path.dirname(__file__)),'freightmap/zipcodelist.csv')
+	reader = csv.DictReader(open(file))
+	zipcodelist = {}
+	for row in reader:
+		eachloc = {} 
+		eachloc["origin"] = row['origin']
+		totalcube = ast.literal_eval(row['totalcube'])
+		weight = ast.literal_eval(row['weight'])
+		eachloc["weight"] = weight['weight__sum']
+		eachloc['totalcube'] = totalcube['totalcube__sum']
+ 		zipcodelist[row['zipcoderegion']] = eachloc 
+
+ 	all_origins = ShipmentMasterLatLon.objects.filter(overlap=0, dest_lon__isnull=False, origin_lon__isnull=False).values('origin_std_city' ).distinct()
+ 	origin_cities = [] 
+ 	for each in all_origins: 
+ 		origin_std_city = each['origin_std_city']
+ 		origin_cities.append(origin_std_city) 
+
+ 	all_dest = ShipmentMasterLatLon.objects.filter(overlap=0, dest_lon__isnull=False, origin_lon__isnull=False).values('dest_std_city' ).distinct()
+ 	destination_cities = [] 
+ 	for each in all_dest: 
+ 		dest_std_city = each['dest_std_city']
+ 		destination_cities.append(dest_std_city) 
+
+ 	customer = []
+ 	all_customers = ShipmentMasterLatLon.objects.filter(overlap=0, dest_lon__isnull=False, origin_lon__isnull=False).values('custname' ).distinct()
+ 	for each in all_customers: 
+ 		cust_name = each['custname']
+ 		customer.append(cust_name) 
+
+ 
+	# return render_to_response('customer_implement.html', {'zipcodelist': json.dumps(zipcodelist), 'customer_directory': customer_directory, 'customer': customer, 'destination': destination_cities, 'origin': origin_cities})       
+	return render_to_response('ELASTIC_SEARCH.html', {'zipcodelist': json.dumps(zipcodelist), 'customer': customer, 'destination': destination_cities, 'origin': origin_cities})       
+	# return render_to_response('home-zipcode.html', {'zipcodelist': json.dumps(zipcodelist), 'destination': destination_cities, 'origin': origin_cities})
+	# return render_to_response('home-NEWEST.html', {'zipcodelist': json.dumps(zipcodelist)})
+
+
 
 def home_expanded(request):
 	# all_objs = ShipmentMasterLatLon.objects.filter(overlap=0, dest_lon__isnull=False, origin_lon__isnull=False)
